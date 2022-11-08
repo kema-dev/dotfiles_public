@@ -6,7 +6,7 @@ My custom apps, tools, config files and settings for a joyful development experi
 
 ***This is a work in progress. I'm not responsible for any damage caused by using these files. Moreoever, this script is intended to be run on a fresh install of [Kali Linux](https://www.kali.org/) rolling release. It may not work on other distros, and it may break on a system that has already been configured. I plan to work on this in the future to make it more robust.***
 
-## Why is this repo mentionned "_pub" ?
+## Why is this repo mentionned "_public" ?
 
 To prevent from leaking personal information I've removed some parts of the setup, most importantly the original `dotfiles/` folder and thus commented out `dotfiles_custom` ansible task in `ansible/main.yml`. You can still use this repository as a template to create your own dotfiles, but you will have to set up your own settings for dotfiles defined in `ansible/roles/dotfiles_custom/vars/main.yml` and enable `dotfiles_custom` ansible task in `ansible/main.yml`. This includes `~/.zshrc`, thus you need to modify it to enable some features (like zsh plugins installed in `ansible/roles/dotfiles`). Do not hesitate to email me at `git@kemadev.fr` if you want to get a preview of those custom dotfiles!
 
