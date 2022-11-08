@@ -1,0 +1,41 @@
+---
+# Install a font
+
+- name: "Check if font {{ font.name }} is already installed"
+  ansible.builtin.stat:
+    path: "{{ font.install_dir }}"
+  register: font_already_present
+  when: font.install_dir is defined
+- name: "Set font {{ font.name }} as installed during the run"
+  ansible.builtin.set_fact:
+    fonts_installed: "{{ fonts_installed | default([]) + [font.name] }}"
+  when: not font_already_present.stat.exists
+- name: Install font {{ font.name }} if not already installed
+  block:
+    - name: "Download font {{ font.name }}"
+      ansible.builtin.get_url:
+        url: "{{ font.download_url }}"
+        dest: "{{ font.download_dir }}"
+        mode: 0644
+      when: font.download_url is defined
+    - name: "Create font extract directory for {{ font.name }}"
+      ansible.builtin.file:
+        path: "{{ font.extract_dir }}"
+        state: directory
+        mode: 0755
+      when: font.extract_dir is defined
+    - name: "Unzip font {{ font.name }}"
+      become: true
+      ansible.builtin.unarchive:
+        src: "{{ font.download_dir }}"
+        dest: "{{ font.extract_dir }}"
+        remote_src: true
+      when: font.download_dir is defined and font.extract_dir is defined
+    - name: "Install font {{ font.name }}"
+      become: true
+      ansible.builtin.copy:
+        src: "{{ font.font_dir_from_extract }}"
+        dest: "{{ font.install_dir }}"
+        mode: 0644
+      when: font.font_dir_from_extract is defined and font.install_dir is defined
+  when: not font_already_present.stat.exists

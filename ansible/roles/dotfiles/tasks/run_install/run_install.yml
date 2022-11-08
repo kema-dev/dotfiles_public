@@ -1,0 +1,20 @@
+---
+# Run pre install, install, and run post install for dotfiles
+
+- name: "Run backup task for {{ dotfile.name }}"
+  include_tasks: "{{ playbook_root_dir }}/roles/dotfiles/tasks/backup/backup.yml"
+- name: "Run pre install task(s) for {{ dotfile.name }}"
+  include_tasks: "{{ pre_install_task }}"
+  loop: "{{ dotfile.pre_install_tasks }}"
+  loop_control:
+    loop_var: pre_install_task
+  when: dotfile.pre_install_tasks is defined
+- name: "Install dotfile(s) {{ dotfile.name }} using {{ dotfile.method.name }} method"
+  include_tasks: "{{ playbook_root_dir }}/roles/dotfiles/tasks/methods/{{ dotfile.method.name }}.yml"
+  when: dotfile.method.name is defined
+- name: "Run post install tasks for {{ dotfile.name }}"
+  include_tasks: "{{ post_install_task }}"
+  loop: "{{ dotfile.post_install_tasks }}"
+  loop_control:
+    loop_var: post_install_task
+  when: dotfile.post_install_tasks is defined

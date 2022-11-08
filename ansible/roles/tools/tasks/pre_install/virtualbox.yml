@@ -1,0 +1,10 @@
+---
+# Run pre install for virtualbox
+
+- name: "Prepare to accept VirtualBox license"
+  become: true
+  ansible.builtin.debconf:
+    name: virtualbox-ext-pack
+    question: virtualbox-ext-pack/license
+    value: "true"
+    vtype: select

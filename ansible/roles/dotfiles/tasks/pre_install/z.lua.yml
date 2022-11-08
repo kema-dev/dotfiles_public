@@ -1,0 +1,13 @@
+---
+# Run pre install for z.lua
+
+# Recommended pre install:
+# apt-get install lua5.4
+
+- name: "Install dependencies for z.lua"
+  become: true
+  ansible.builtin.package:
+    name:
+      - "lua5.4"
+    state: present
+    update_cache: true

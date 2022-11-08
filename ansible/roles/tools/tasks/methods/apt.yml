@@ -1,0 +1,10 @@
+---
+# Get and install apt package(s)
+
+- name: "Install package(s) for {{ app.name }} using {{ app.method.name }} method"
+  become: true
+  ansible.builtin.apt:
+    name: "{{ app.method.packages }}"
+    state: present
+    update_cache: true
+  when: app.method.packages is defined

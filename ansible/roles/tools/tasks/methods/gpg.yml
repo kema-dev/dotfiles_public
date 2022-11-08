@@ -1,0 +1,28 @@
+---
+# Get and install gpg package(s)
+
+- name: "Add gpg repo key(s) for {{ app.name }} using {{ app.method.name }} method"
+  become: true
+  ansible.builtin.apt_key:
+    url: "{{ repo_key }}"
+    state: present
+  loop: "{{ app.method.repo_keys }}"
+  loop_control:
+    loop_var: repo_key
+  when: app.method.repo_keys is defined
+- name: "Add gpg repository(ies) for {{ app.name }} using {{ app.method.name }} method"
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "{{ repo }}"
+    state: present
+  loop: "{{ app.method.repositories }}"
+  loop_control:
+    loop_var: repo
+  when: app.method.repositories is defined
+- name: "Install gpg package(s) for {{ app.name }} using {{ app.method.name }} method"
+  become: true
+  ansible.builtin.apt:
+    name: "{{ app.method.packages }}"
+    state: present
+    update_cache: true
+  when: app.method.packages is defined

@@ -1,0 +1,17 @@
+---
+# Get and install a deb package
+
+- name: "Download package(s) for {{ app.name }} using {{ app.method.name }} method"
+  ansible.builtin.get_url:
+    url: "{{ app.method.url }}"
+    dest: "{{ app.method.dest }}"
+    mode: 0644
+    force: true
+  when: app.method.url is defined and app.method.dest is defined
+- name: "Install package(s) for {{ app.name }} using {{ app.method.name }} method"
+  become: true
+  ansible.builtin.apt:
+    deb: "{{ app.method.dest }}"
+    state: present
+    update_cache: true
+  when: app.method.dest is defined

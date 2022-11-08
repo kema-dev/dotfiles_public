@@ -1,0 +1,29 @@
+---
+# Backup dotfile
+
+- name: "Check if dotfile {{ dotfile.name }} exists"
+  become: true
+  ansible.builtin.stat:
+    path: "{{ dotfile.method.dest }}"
+  register: dotfile_exists
+- name: "Backup dotfile {{ dotfile.name }}"
+  block:
+    - name: "Create backup directory for {{ dotfile.name }}"
+      ansible.builtin.file:
+        path: "{{ dotfile.method.backup_folder }}"
+        state: directory
+        mode: 0777
+      when: dotfile.method.backup_folder is defined
+    - name: "Backup dotfile {{ dotfile.name }}"
+      ansible.builtin.copy:
+        src: "{{ dotfile.method.dest }}"
+        dest: "{{ dotfile.method.backup_folder }}/{{ dotfile.method.dest | basename }}"
+        backup: true
+        mode: 0777
+      when: dotfile.method.backup_folder is defined and dotfile.method.dest is defined
+    - name: "Clean old dotfile {{ dotfile.name }}"
+      ansible.builtin.file:
+        path: "{{ dotfile.method.dest }}"
+        state: absent
+      when: dotfile.method.dest is defined
+  when: dotfile_exists.stat.exists and dotfile.method.name != "git"

@@ -1,0 +1,59 @@
+---
+# Assign required data for dotiles to install
+
+home_dir: "{{ ansible_env.HOME }}"
+dotfiles_dir: "{{ ansible_env.HOME }}/.dotfiles/dotfiles"
+omzsh_dir: "{{ home_dir }}/.oh-my-zsh"
+omzsh_plugins_dir: "{{ omzsh_dir }}/custom/plugins"
+omzsh_themes_dir: "{{ omzsh_dir }}/custom/themes"
+backup_dir: "{{ dotfiles_dir }}/backup"
+playbook_root_dir: "{{ playbook_dir }}"
+dotfiles:
+  - gitconfig:
+    name: "gitconfig"
+    desc: "Git"
+    method:
+      name: "link"
+      src: "{{ dotfiles_dir }}/git/gitconfig"
+      dest: "{{ home_dir }}/.gitconfig"
+      backup_folder: "{{ backup_dir }}/git"
+  - tmux:
+    name: "tmux"
+    desc: "Terminal multiplexer"
+    method:
+      name: "link"
+      src: "{{ dotfiles_dir }}/tmux/tmux.conf"
+      dest: "{{ home_dir }}/.tmux.conf"
+      backup_folder: "{{ backup_dir }}/tmux"
+  - alacritty:
+    name: "alacritty"
+    desc: "Terminal emulator"
+    method:
+      name: "link"
+      src: "{{ dotfiles_dir }}/terminal/alacritty.yml"
+      dest: "{{ home_dir }}/.config/alacritty/alacritty.yml"
+      backup_folder: "{{ backup_dir }}/terminal"
+  - custom_plugin:
+    name: "custom_plugin"
+    desc: "Aliases, config, functions, and more"
+    method:
+      name: "link"
+      src: "{{ dotfiles_dir }}/shell/omz_custom_plugins/kema.plugin.zsh"
+      dest: "{{ omzsh_plugins_dir }}/kema/kema.plugin.zsh"
+      backup_folder: "{{ backup_dir }}/shell/omz_custom_plugins"
+  - custom_theme:
+    name: "custom_theme"
+    desc: "Prompt theme"
+    method:
+      name: "link"
+      src: "{{ dotfiles_dir }}/shell/omz_custom_themes/kema.zsh-theme"
+      dest: "{{ omzsh_themes_dir }}/kema.zsh-theme"
+      backup_folder: "{{ backup_dir }}/shell/omz_custom_themes"
+  - zshrc:
+    name: "zshrc"
+    desc: "Zsh"
+    method:
+      name: "link"
+      src: "{{ dotfiles_dir }}/shell/config/.zshrc"
+      dest: "{{ home_dir }}/.zshrc"
+      backup_folder: "{{ backup_dir }}/shell/config"

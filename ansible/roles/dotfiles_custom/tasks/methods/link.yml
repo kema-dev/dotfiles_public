@@ -1,0 +1,15 @@
+---
+# Install dotfile using symlink
+
+- name: "Create parent folder for {{ dotfile.name }}"
+  ansible.builtin.file:
+    path: "{{ dotfile.method.dest | dirname }}"
+    state: directory
+    mode: u+rwx
+  when: dotfile.method.dest is defined
+- name: "Install dotfile {{ dotfile.name }} using {{ dotfile.method.name }} method"
+  ansible.builtin.file:
+    src: "{{ dotfile.method.src }}"
+    dest: "{{ dotfile.method.dest }}"
+    state: link
+  when: dotfile.method.src is defined and dotfile.method.dest is defined

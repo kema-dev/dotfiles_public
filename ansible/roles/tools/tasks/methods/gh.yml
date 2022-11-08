@@ -1,0 +1,10 @@
+---
+# Get and install tools using gh
+
+- name: "Install package(s) for {{ app.name }} using {{ app.method.name }} method"
+  ansible.builtin.command: "gh extension install {{ extension }}"
+  loop: "{{ app.method.packages }}"
+  loop_control:
+    loop_var: extension
+  when: app.method.packages is defined
+  failed_when: false

@@ -1,0 +1,19 @@
+---
+# Run miscelaneous tasks
+
+- name: "Change timezone to {{ timezone }}"
+  ansible.builtin.command: "timedatectl set-timezone {{ timezone }}"
+  become: true
+  when: timezone is defined
+- name: "Create keyboard shortcuts : {{ app_shortcuts }}"
+  ansible.builtin.command: "xfconf-query -c xfce4-keyboard-shortcuts -n -t 'string' -p '/commands/custom/{{ app.shortcut }}' -s {{ app.command }}"
+  with_items: "{{ app_shortcuts }}"
+  loop_control:
+    loop_var: app
+  when: app_shortcuts is defined
+- name: "Configure GitHub CLI"
+  ansible.builtin.command: "gh config set {{ param.name }} '{{ param.value }}'"
+  loop: "{{ gh_config }}"
+  loop_control:
+    loop_var: param
+  when: gh_config is defined

@@ -1,0 +1,12 @@
+---
+# Install desired fonts
+
+- name: "Install fonts"
+  include_tasks: install_font.yml
+  loop: "{{ fonts }}"
+  loop_control:
+    loop_var: font
+  when: fonts is defined
+- name: "Update font cache if a font has been installed"
+  ansible.builtin.command: fc-cache -f -v
+  when: fonts_installed is defined

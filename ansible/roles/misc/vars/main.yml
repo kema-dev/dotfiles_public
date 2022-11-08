@@ -1,0 +1,28 @@
+---
+# Assign required data for apps to install
+
+timezone: "Europe/Paris"
+app_shortcuts:
+  - thunar:
+    name: "thunar"
+    desc: "File manager keyboard shortcut"
+    shortcut: "<Super>e"
+    command: '''sh -c "wmctrl -x -a thunar || thunar"'''
+  - alacritty:
+    name: "alacritty"
+    desc: "Terminal emulator keyboard shortcut"
+    shortcut: "<Ctrl><Alt>z"
+    command: '''sh -c "wmctrl -x -a alacritty || alacritty"'''
+  - cliphist:
+    name: "cliphist"
+    desc: "Clipboard history keyboard shortcut"
+    shortcut: "<Ctrl><Alt>x"
+    command: "'xfce4-clipman-history'"
+terminal: "/usr/bin/alacritty"
+gh_config:
+  - pager:
+    name: "pager"
+    value: "delta -s"
+  - editor:
+    name: "editor"
+    value: "nvim"

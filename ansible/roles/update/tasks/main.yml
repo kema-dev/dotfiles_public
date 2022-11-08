@@ -1,0 +1,9 @@
+---
+# Update system
+
+- name: "Update system"
+  become: true
+  ansible.builtin.package:
+    update_cache: true
+    upgrade: full
+    state: present

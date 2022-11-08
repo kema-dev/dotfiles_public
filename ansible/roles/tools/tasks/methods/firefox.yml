@@ -1,0 +1,43 @@
+---
+# Get latest version of Firefox
+
+- name: "Find latest version of {{ app.name }} using {{ app.method.name }} method"
+  ansible.builtin.uri:
+    url: "{{ app.method.url }}"
+    method: "GET"
+  register: firefox_request
+- name: "Download {{ app.name }} archive using {{ app.method.name }} method"
+  ansible.builtin.get_url:
+    url: "{{ firefox_request.url }}"
+    dest: "{{ app.method.dest }}"
+    mode: 0755
+- name: "Extract {{ app.name }} archive using {{ app.method.name }} method"
+  become: true
+  ansible.builtin.unarchive:
+    src: "{{ app.method.dest }}"
+    dest: "{{ app.method.install_dir }}"
+    remote_src: true
+    mode: 0755
+- name: "Rename extracted {{ app.name }} directory using {{ app.method.name }} method"
+  become: true
+  ansible.builtin.command: "mv {{ app.method.install_dir }}/firefox {{ app.method.install_dir }}/{{ app.name }}"
+  when: app.name != "firefox"
+- name: "Symbolic link {{ app.name }} to {{ app.method.link_dir }} using {{ app.method.name }} method"
+  become: true
+  ansible.builtin.file:
+    src: "{{ app.method.install_dir }}/{{ app.name }}/firefox"
+    dest: "{{ app.method.link_dir }}/{{ app.name }}"
+    state: link
+- name: "Install {{ app.name }} desktop file using {{ app.method.name }} method"
+  become: true
+  ansible.builtin.command: "desktop-file-install {{ ansible_env.HOME }}/.dotfiles/ansible/roles/tools/tasks/files/{{ app.name }}.desktop"
+  when: true
+- name: "Update desktop database"
+  become: true
+  ansible.builtin.command: "update-desktop-database"
+  when: true
+- name: "Clean up {{ app.name }} archive using {{ app.method.name }} method"
+  become: true
+  ansible.builtin.file:
+    dest: "{{ app.method.dest }}"
+    state: absent

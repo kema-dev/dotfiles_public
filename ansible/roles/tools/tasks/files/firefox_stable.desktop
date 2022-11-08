@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Firefox Stable
+GenericName=Web Browser
+Comment=Web Browser from Mozilla
+Exec=/opt/firefox_stable/firefox
+Terminal=false
+Icon=/opt/firefox_stable/browser/chrome/icons/default/default128.png
+Type=Application
+StartupNotify=false
+Categories=WebBrowser
+MimeType=text/plain;

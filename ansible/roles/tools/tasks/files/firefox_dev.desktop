@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Firefox Developer Edition
+GenericName=Web Browser
+Comment=Web browser from Mozilla, shipped with developer tools
+Exec=/opt/firefox_dev/firefox
+Terminal=false
+Icon=/opt/firefox_dev/browser/chrome/icons/default/default128.png
+Type=Application
+StartupNotify=false
+Categories=WebBrowser
+MimeType=text/plain;

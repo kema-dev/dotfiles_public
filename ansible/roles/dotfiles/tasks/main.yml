@@ -1,0 +1,9 @@
+---
+# Install desired dotfiles
+
+- name: "Install dotfiles"
+  include_tasks: "{{ playbook_root_dir }}/roles/dotfiles/tasks/run_install/run_install.yml"
+  loop: "{{ dotfiles }}"
+  loop_control:
+    loop_var: dotfile
+  when: dotfiles is defined

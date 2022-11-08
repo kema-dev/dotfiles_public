@@ -1,0 +1,15 @@
+---
+# ansible-playbook main.yml
+
+- name: "Main wrapper"
+  hosts: all
+  connection: local
+  gather_facts: true
+  roles:
+    - role: update
+    - role: fonts
+    - role: tools
+    - role: dotfiles
+    # - role: dotfiles_custom
+    - role: misc
+    - role: update

@@ -1,0 +1,198 @@
+---
+# Assign required data for apps to install
+
+tmp_dir: /tmp
+app_dir: /opt
+bin_dir: /usr/local/bin
+playbook_root_dir: "{{ playbook_dir }}"
+apps:
+  - brave:
+    name: "brave"
+    desc: "Web browser, based on Chromium, with privacy and security in mind"
+    check_command: "brave-browser --version"
+    method:
+      name: "gpg"
+      repo_keys:
+        - "https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg"
+      repositories:
+        - "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"
+      packages:
+        - "brave-browser"
+  - discord:
+    name: "discord"
+    desc: "Chat and voice client"
+    check_command: "which discord"
+    method:
+      name: "deb"
+      url: "https://discord.com/api/download?platform=linux&format=deb"
+      dest: "{{ tmp_dir }}/discord.deb"
+  - spotify:
+    name: "spotify"
+    desc: "Music streaming service"
+    check_command: "spotify --version"
+    method:
+      name: "gpg"
+      repo_keys:
+        - "https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg"
+      repositories:
+        - "deb http://repository.spotify.com stable non-free"
+      packages:
+        - "spotify-client"
+  - vscode:
+    name: "vscode"
+    desc: "Code editor"
+    check_command: "/bin/code --version" # INFO Specifying full path to avoid conflict with vscode-server
+    method:
+      name: "deb"
+      url: "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+      dest: "{{ tmp_dir }}/vscode.deb"
+  - virtualbox:
+    name: "virtualbox"
+    desc: "Virtualization software"
+    check_command: "which virtualbox"
+    pre_install_tasks:
+      - "roles/tools/tasks/pre_install/virtualbox.yml"
+    method:
+      name: "gpg"
+      repo_keys:
+        - "https://www.virtualbox.org/download/oracle_vbox_2016.asc"
+        - "https://www.virtualbox.org/download/oracle_vbox.asc"
+      repositories:
+        - "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian bullseye contrib"
+      packages:
+        - "dkms"
+        - "virtualbox"
+        - "virtualbox-ext-pack"
+  - docker:
+    name: "docker"
+    desc: "Containerization software"
+    check_command: "docker --version"
+    method:
+      name: "apt"
+      packages:
+        - "docker.io"
+        - "docker-compose"
+    post_install_tasks:
+      - "roles/tools/tasks/post_install/docker.yml"
+  - delta:
+    name: "delta"
+    desc: "Diff viewer"
+    check_command: "which delta"
+    method:
+      name: "deb"
+      url: "https://github.com/dandavison/delta/releases/download/0.14.0/git-delta_0.14.0_amd64.deb"
+      dest: "{{ tmp_dir }}/delta.deb"
+  - useful_tools_apt:
+    name: "useful_tools_apt"
+    desc: "Useful tools + some dependencies"
+    check_command: "/bin/false"
+    method:
+      name: "apt"
+      packages:
+        - "fzf"
+        - "thefuck"
+        - "exa"
+        - "bat"
+        - "neovim"
+        - "autokey-gtk"
+        - "tmux"
+        - "fd-find"
+        - "ripgrep"
+        - "xfce4-panel-profiles"
+        - "golang-go"
+        - "nodejs"
+        - "npm"
+        - "ruby"
+        - "cmake"
+        - "python3"
+        - "python3-pip"
+        - "ansible-lint"
+        - "httpie"
+  - useful_tools_pip:
+    name: "useful_tools_pip"
+    desc: "Useful tools"
+    check_command: "/bin/false"
+    method:
+      name: "pip"
+      packages:
+        - "arsenal-cli"
+        - "glances"
+        - "asciinema"
+  - rust:
+    name: "rust"
+    desc: "Rust programming language"
+    check_command: "which rustup"
+    method:
+      name: "shell"
+      commands:
+        - "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+  - alacritty:
+    name: "alacritty"
+    desc: "Terminal emulator, GPU-accelerated"
+    check_command: "which alacritty"
+    pre_install_tasks:
+      - "roles/tools/tasks/pre_install/alacritty.yml"
+    method:
+      name: "shell"
+      commands:
+        # INFO Speciyfing full path to avoid changing PATH for ansible
+        - "~/.cargo/bin/cargo install alacritty"
+    post_install_tasks:
+      - "roles/tools/tasks/post_install/alacritty.yml"
+  - useful_tools_cargo:
+    name: "useful_tools_cargo"
+    desc: "Useful tools"
+    check_command: "/bin/false"
+    method:
+      name: "cargo"
+      packages:
+        - "tealdeer"
+        - "sd"
+  - useful_tools_gh:
+    name: "useful_tools_gh"
+    desc: "Useful tools"
+    check_command: "/bin/false"
+    method:
+      name: "gh"
+      packages:
+        - "davidraviv/gh-clean-branches"
+        - "hashue/gh-fuzzyclone"
+        - "dlvhdr/gh-dash"
+  - chrome:
+    name: "chrome"
+    desc: "Web browser"
+    check_command: "which google-chrome"
+    method:
+      name: "deb"
+      url: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+      dest: "{{ tmp_dir }}/chrome.deb"
+  - firefox_stable:
+    name: "firefox_stable"
+    desc: "Web browser"
+    check_command: "which /opt/firefox_stable/firefox"
+    method:
+      name: "firefox"
+      url: "https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US"
+      dest: "{{ tmp_dir }}/firefox.tar.bz2"
+      install_dir: "{{ app_dir }}"
+      link_dir: "{{ bin_dir }}"
+  - firefox_dev:
+    name: "firefox_dev"
+    desc: "Web browser, development version"
+    check_command: "which /opt/firefox_dev/firefox"
+    method:
+      name: "firefox"
+      url: "https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=linux64&lang=en-US"
+      dest: "{{ tmp_dir }}/firefox_dev.tar.bz2"
+      install_dir: "{{ app_dir }}"
+      link_dir: "{{ bin_dir }}"
+  # - tor_browser:
+  #   name: "tor_browser"
+  #   desc: "Tor web browser"
+  #   check_command: "which /opt/tor_browser/firefox"
+  #   method:
+  #     name: "firefox"
+  #     url: "https://www.torproject.org/dist/torbrowser/11.5.4/tor-browser-linux64-11.5.4_en-US.tar.xz"
+  #     dest: "{{ tmp_dir }}/tor_browser.tar.bz2"
+  #     install_dir: "{{ app_dir }}"
+  #     link_dir: "{{ bin_dir }}"

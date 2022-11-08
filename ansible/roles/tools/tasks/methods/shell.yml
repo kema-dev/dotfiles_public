@@ -1,0 +1,9 @@
+---
+# Get and install tools using shell
+
+- name: "Install package(s) for {{ app.name }} using {{ app.method.name }} method"
+  ansible.builtin.shell: "{{ command }}"
+  loop: "{{ app.method.commands }}"
+  loop_control:
+    loop_var: command
+  when: app.method.commands is defined

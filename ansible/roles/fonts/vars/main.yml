@@ -1,0 +1,24 @@
+---
+# Assign required data for fonts to install
+
+tmp_dir: "/tmp"
+versions:
+  jetbrains_mono: "2.242"
+  jetbrains_mono_nf: "v2.2.2"
+fonts:
+  - JetBrainsMono:
+    name: "JetBrainsMono"
+    desc: "Monospace font, made for developers"
+    download_url: "https://download.jetbrains.com/fonts/JetBrainsMono-{{ versions['jetbrains_mono'] }}.zip"
+    install_dir: "/usr/share/fonts/JetBrainsMono"
+    download_dir: "{{ tmp_dir }}/JetBrainsMono-{{ versions['jetbrains_mono'] }}.zip"
+    extract_dir: "{{ tmp_dir }}/JetBrainsMono-{{ versions['jetbrains_mono'] }}"
+    font_dir_from_extract: "{{ tmp_dir }}/JetBrainsMono-{{ versions['jetbrains_mono'] }}/fonts/ttf/"
+  - JetBrainsMonoNF:
+    name: "JetBrainsMonoNF"
+    desc: "Monospace font, made for developers (Nerd Font)"
+    download_url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ versions['jetbrains_mono_nf'] }}/JetBrainsMono.zip"
+    install_dir: "/usr/share/fonts/JetBrainsMonoNF"
+    download_dir: "{{ tmp_dir }}/JetBrainsMonoNF-{{ versions['jetbrains_mono_nf'] }}.zip"
+    extract_dir: "{{ tmp_dir }}/JetBrainsMonoNF-{{ versions['jetbrains_mono_nf'] }}"
+    font_dir_from_extract: "{{ tmp_dir }}/JetBrainsMonoNF-{{ versions['jetbrains_mono_nf'] }}/"

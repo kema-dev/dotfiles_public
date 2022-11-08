@@ -1,0 +1,20 @@
+---
+# Install dotfile using git
+
+- name: "Check if parent folder for dotfile {{ dotfile.name }} exists"
+  ansible.builtin.stat:
+    path: "{{ dotfile.method.dest | dirname }}"
+  register: backup_folder_exists
+- name: "Create parent folder for {{ dotfile.name }}"
+  ansible.builtin.file:
+    path: "{{ dotfile.method.dest | dirname }}"
+    state: directory
+    mode: u+rwx
+  when: dotfile.method.dest is defined and not backup_folder_exists.stat.exists
+- name: "Install dotfile {{ dotfile.name }} using {{ dotfile.method.name }} method"
+  ansible.builtin.git:
+    repo: "{{ dotfile.method.src }}"
+    dest: "{{ dotfile.method.dest }}"
+    update: true
+    version: "HEAD"
+  when: dotfile.method.src is defined and dotfile.method.dest is defined

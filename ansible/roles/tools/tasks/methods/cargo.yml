@@ -1,0 +1,10 @@
+---
+# Get and install tools using cargo
+
+- name: "Install package(s) for {{ app.name }} using {{ app.method.name }} method"
+  # INFO Speciyfing full path to avoid changing PATH for ansible
+  ansible.builtin.command: "~/.cargo/bin/cargo install {{ extension }}"
+  loop: "{{ app.method.packages }}"
+  loop_control:
+    loop_var: extension
+  when: app.method.packages is defined

@@ -1,0 +1,8 @@
+---
+# Get and install tools using pip
+
+- name: "Install package(s) for {{ app.name }} using {{ app.method.name }} method"
+  ansible.builtin.pip:
+    name: "{{ app.method.packages }}"
+    state: present
+  when: app.method.packages is defined

@@ -1,0 +1,24 @@
+---
+# Run pre install, install, and run post install for tools
+
+- name: "Check if {{ app.name }} is already installed"
+  ansible.builtin.command: "{{ app.check_command }}"
+  when: app.check_command is defined
+  register: app_installed
+  ignore_errors: true
+  changed_when: false
+- name: "Run pre install tasks for {{ app.name }}"
+  include_tasks: "{{ pre_install_task }}"
+  loop: "{{ app.pre_install_tasks }}"
+  loop_control:
+    loop_var: pre_install_task
+  when: app.pre_install_tasks is defined and app_installed.rc != 0
+- name: "Install app(s) {{ app.name }} using {{ app.method.name }} method"
+  include_tasks: "{{ playbook_root_dir }}/roles/tools/tasks/methods/{{ app.method.name }}.yml"
+  when: app.method.name is defined and app_installed.rc != 0
+- name: "Run post install tasks for {{ app.name }}"
+  include_tasks: "{{ post_install_task }}"
+  loop: "{{ app.post_install_tasks }}"
+  loop_control:
+    loop_var: post_install_task
+  when: app.post_install_tasks is defined

@@ -1,0 +1,19 @@
+---
+# Run pre install for alacritty
+
+# Recommended pre install:
+# apt-get install cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
+
+- name: "Install dependencies for alacritty"
+  become: true
+  ansible.builtin.package:
+    name:
+      - "cmake"
+      - "pkg-config"
+      - "libfreetype6-dev"
+      - "libfontconfig1-dev"
+      - "libxcb-xfixes0-dev"
+      - "libxkbcommon-dev"
+      - "python3"
+    state: present
+    update_cache: true

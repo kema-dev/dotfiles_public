@@ -1,0 +1,91 @@
+---
+# Assign required data for dotiles to install
+
+home_dir: "{{ ansible_env.HOME }}"
+dotfiles_dir: "{{ ansible_env.HOME }}/.dotfiles/dotfiles"
+omzsh_dir: "{{ home_dir }}/.oh-my-zsh"
+omzsh_plugins_dir: "{{ omzsh_dir }}/custom/plugins"
+omzsh_themes_dir: "{{ omzsh_dir }}/custom/themes"
+backup_dir: "{{ dotfiles_dir }}/backup"
+playbook_root_dir: "{{ playbook_dir }}"
+dotfiles:
+  - nvim:
+    name: "nvim"
+    desc: "Neovim config plugins and themes"
+    method:
+      name: "git"
+      src: "https://github.com/NvChad/NvChad"
+      dest: "{{ home_dir }}/.config/nvim"
+      backup_folder: "{{ backup_dir }}"
+  - ohmyzsh:
+    name: "ohmyzsh"
+    desc: "Zsh framework"
+    method:
+      name: "git"
+      src: "https://github.com/ohmyzsh/ohmyzsh.git"
+      dest: "{{ home_dir }}/.oh-my-zsh"
+  - alias-tips:
+    name: "alias-tips"
+    desc: "Aliases reminder"
+    method:
+      name: "git"
+      src: "https://github.com/djui/alias-tips"
+      dest: "{{ omzsh_plugins_dir }}/alias-tips"
+  - forgit:
+    name: "forgit"
+    desc: "Enhanced git workflow leveraging fzf"
+    method:
+      name: "git"
+      src: "https://github.com/wfxr/forgit"
+      dest: "{{ omzsh_plugins_dir }}/forgit"
+  - fzf-tab:
+    name: "fzf-tab"
+    desc: "Fuzzy tab completion"
+    method:
+      name: "git"
+      src: "https://github.com/Aloxaf/fzf-tab"
+      dest: "{{ omzsh_plugins_dir }}/fzf-tab"
+  - fzf-zsh-plugin:
+    name: "fzf-zsh-plugin"
+    desc: "Fuzzy history search"
+    method:
+      name: "git"
+      src: "https://github.com/unixorn/fzf-zsh-plugin"
+      dest: "{{ omzsh_plugins_dir }}/fzf-zsh-plugin"
+  - zsh-autosuggestions:
+    name: "zsh-autosuggestions"
+    desc: "Autosuggestions based on history"
+    method:
+      name: "git"
+      src: "https://github.com/zsh-users/zsh-autosuggestions"
+      dest: "{{ omzsh_plugins_dir }}/zsh-autosuggestions"
+  - zsh-intearctive-cd:
+    name: "zsh-interactive-cd"
+    desc: "Fuzzy cd"
+    method:
+      name: "git"
+      src: "https://github.com/changyuheng/zsh-interactive-cd"
+      dest: "{{ omzsh_plugins_dir }}/zsh-interactive-cd"
+  - zsh-syntax-highlighting:
+    name: "zsh-syntax-highlighting"
+    desc: "Terminal syntax highlighting"
+    method:
+      name: "git"
+      src: "https://github.com/zsh-users/zsh-syntax-highlighting"
+      dest: "{{ omzsh_plugins_dir }}/zsh-syntax-highlighting"
+  - z.lua:
+    name: "z.lua"
+    desc: "Fuzzy cd history"
+    method:
+      name: "git"
+      src: "https://github.com/skywind3000/z.lua"
+      dest: "{{ omzsh_plugins_dir }}/z.lua"
+    pre_install_tasks:
+      - "roles/dotfiles/tasks/pre_install/z.lua.yml"
+  - powerlevel10k:
+    name: "powerlevel10k"
+    desc: "Prompt theme"
+    method:
+      name: "git"
+      src: "https://github.com/romkatv/powerlevel10k"
+      dest: "{{ omzsh_themes_dir }}/powerlevel10k"
